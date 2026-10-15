@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Sakippp — Fullstack Developer</title>
+<meta name="description" content="Portofolio Muhammad Tsaqib Hidayat (Sakippp), fullstack developer Laravel, React, PostgreSQL.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* tokens */
+:root,[data-theme=light]{--paper:#f4efe6;--paper-raised:#ffffff;--ink:#111111;--ink-muted:#4a4640;--yellow:#ffd60a;--tomato:#ff4d2e;--mint:#3ddc97;--cobalt:#2f4bff;--on-bright:#111111;--on-cobalt:#ffffff;--grid-line:#1111110f;--shadow-sm:2px 2px 0 0 #111111;--shadow-md:5px 5px 0 0 #111111;--shadow-lg:8px 8px 0 0 #111111}
+[data-theme=dark]{--paper:#141311;--paper-raised:#1e1c19;--ink:#f4efe6;--ink-muted:#b9b2a5;--grid-line:#f4efe61a;--shadow-sm:2px 2px 0 0 #f4efe6;--shadow-md:5px 5px 0 0 #f4efe6;--shadow-lg:8px 8px 0 0 #f4efe6}
+:root{--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;--space-8:72px;--space-9:96px;--radius-0:0;--radius-pill:999px;--border-thin:2px;--border-thick:3px;--font-display:"Bricolage Grotesque", "Arial Black", system-ui, sans-serif;--font-body:"Bricolage Grotesque", system-ui, sans-serif;--font-mono:"Space Mono", ui-monospace, Menlo, monospace}
+
+/* komponen */
+/* Balok — komponen CSS murni. Semua nilai berasal dari tokens.css. */
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/26px var(--font-body)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+::selection{background:var(--yellow);color:var(--on-bright)}
+
+/* ---------- Button ---------- */
+.nb-btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:48px;padding:12px 22px;
+  font:700 17px/1 var(--font-display);color:var(--on-bright);background:var(--yellow);
+  border:var(--border-thick) solid var(--ink);border-radius:var(--radius-0);box-shadow:var(--shadow-md);
+  cursor:pointer;text-decoration:none;transition:transform .08s ease-out,box-shadow .08s ease-out}
+.nb-btn:hover{transform:translate(3px,3px);box-shadow:var(--shadow-sm)}
+.nb-btn:active{transform:translate(5px,5px);box-shadow:none}
+.nb-btn--tomato{background:var(--tomato)}
+.nb-btn--mint{background:var(--mint)}
+.nb-btn--cobalt{background:var(--cobalt);color:var(--on-cobalt)}
+.nb-btn--plain{background:var(--paper-raised);color:var(--ink)}
+.nb-btn--sm{min-height:36px;padding:8px 14px;font-size:15px}
+.nb-btn--lg{min-height:60px;padding:16px 30px;font-size:20px}
+.nb-btn[disabled],.nb-btn[aria-disabled="true"]{cursor:not-allowed;box-shadow:none;transform:none;color:var(--ink-muted);
+  background:repeating-linear-gradient(135deg,var(--paper) 0 6px,var(--paper-raised) 6px 12px)}
+
+/* ---------- Card ---------- */
+.nb-card{background:var(--paper-raised);color:var(--ink);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-md);padding:var(--space-5)}
+.nb-card--yellow{background:var(--yellow);color:var(--on-bright)}
+.nb-card--mint{background:var(--mint);color:var(--on-bright)}
+.nb-card--tomato{background:var(--tomato);color:var(--on-bright)}
+.nb-card--cobalt{background:var(--cobalt);color:var(--on-cobalt)}
+.nb-card--link{display:block;text-decoration:none;transition:transform .08s ease-out,box-shadow .08s ease-out}
+.nb-card--link:hover{transform:translate(3px,3px);box-shadow:var(--shadow-sm)}
+.nb-card__index{font:800 56px/1 var(--font-display);letter-spacing:-.04em;margin:0 0 var(--space-4)}
+.nb-card__title{font:700 28px/1.1 var(--font-display);letter-spacing:-.02em;margin:0 0 var(--space-2)}
+.nb-card__text{margin:0}
+
+/* ---------- Tag ---------- */
+.nb-tag{display:inline-flex;align-items:center;padding:3px 12px;font:700 13px/16px var(--font-mono);letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink);background:var(--paper-raised);border:var(--border-thin) solid var(--ink);border-radius:var(--radius-pill)}
+.nb-tag--yellow{background:var(--yellow);color:var(--on-bright)}
+.nb-tag--tomato{background:var(--tomato);color:var(--on-bright)}
+.nb-tag--mint{background:var(--mint);color:var(--on-bright)}
+.nb-tag--cobalt{background:var(--cobalt);color:var(--on-cobalt)}
+.nb-sticker{transform:rotate(-5deg);box-shadow:var(--shadow-sm);padding:6px 16px;font-size:14px}
+
+/* ---------- Field ---------- */
+.nb-field{display:grid;gap:var(--space-2)}
+.nb-label{font:700 13px/16px var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+.nb-input{width:100%;padding:12px 14px;font:400 17px/24px var(--font-body);color:var(--ink);background:var(--paper-raised);
+  border:var(--border-thick) solid var(--ink);border-radius:var(--radius-0);box-shadow:var(--shadow-sm);transition:box-shadow .08s ease-out}
+.nb-input::placeholder{color:var(--ink-muted)}
+.nb-input:focus{outline:3px solid var(--ink);outline-offset:3px;box-shadow:var(--shadow-md)}
+textarea.nb-input{resize:vertical;min-height:112px}
+.nb-hint{margin:0;font:400 14px/20px var(--font-body);color:var(--ink-muted)}
+.nb-error{display:inline-block;justify-self:start;margin:0;padding:3px 10px;font:700 13px/18px var(--font-mono);color:var(--on-bright);
+  background:var(--tomato);border:var(--border-thin) solid var(--ink)}
+.nb-field--error .nb-input{border-style:dashed}
+
+/* ---------- Marquee ---------- */
+.nb-marquee{overflow:hidden;background:var(--yellow);color:var(--on-bright);border-block:var(--border-thick) solid var(--ink)}
+.nb-marquee__track{display:flex;width:max-content;animation:nb-scroll 32s linear infinite}
+.nb-marquee__item{display:inline-flex;align-items:center;gap:56px;padding:14px 0 14px 56px;font:800 26px/1 var(--font-display);letter-spacing:-.01em;white-space:nowrap}
+.nb-marquee__item::after{content:"";width:14px;height:14px;background:currentColor;transform:rotate(45deg)}
+@keyframes nb-scroll{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.nb-marquee__track{animation:none}.nb-btn,.nb-card--link,.nb-input{transition:none}}
+
+/* ---------- Nav ---------- */
+.nb-nav{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-3) var(--space-5);
+  background:var(--paper);color:var(--ink);border-bottom:var(--border-thick) solid var(--ink)}
+.nb-logo{display:inline-flex;align-items:center;gap:10px;font:800 28px/1 var(--font-display);letter-spacing:-.03em;color:var(--ink);text-decoration:none}
+.nb-logo__mark{width:26px;height:26px;background:var(--tomato);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-sm)}
+.nb-nav__links{display:flex;gap:var(--space-4);margin:0;padding:0;list-style:none}
+.nb-nav__links a{display:block;padding:8px 10px;font:700 16px/1 var(--font-display);color:var(--ink);text-decoration:none;border:var(--border-thin) solid transparent}
+.nb-nav__links a:hover,.nb-nav__links a[aria-current="page"]{background:var(--yellow);color:var(--on-bright);border-color:var(--ink)}
+
+/* ---------- Utilities ---------- */
+.nb-grid{background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:32px 32px}
+.nb-eyebrow{margin:0 0 var(--space-3);font:700 13px/16px var(--font-mono);letter-spacing:.05em;text-transform:uppercase}
+
+/* halaman */
+
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--font-display);letter-spacing:-.03em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--space-5)}
+section{border-top:var(--border-thick) solid var(--ink)}
+.sec{padding:var(--space-8) 0}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:var(--space-5);margin-bottom:var(--space-7);flex-wrap:wrap}
+h2{font-weight:800;font-size:clamp(40px,5.4vw,64px);line-height:1}
+
+/* hero */
+.hero{padding:var(--space-7) 0 var(--space-8)}
+.hero__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--space-7);align-items:center}
+h1{font-weight:800;font-size:clamp(48px,7.2vw,96px);line-height:.94;margin:var(--space-4) 0 var(--space-5)}
+.mark{background:var(--yellow);color:var(--on-bright);padding:0 .14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.lead{font-size:20px;line-height:30px;max-width:30em;margin-bottom:var(--space-6)}
+.cta{display:flex;gap:var(--space-5);flex-wrap:wrap;margin-bottom:var(--space-5)}
+.note{font:400 13px/18px var(--font-mono);color:var(--ink-muted)}
+.art{position:relative;min-height:460px}
+.art__b{position:absolute;border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-lg)}
+.art__b--t{background:var(--tomato);inset:0 26% 34% 0}
+.art__b--c{background:var(--cobalt);inset:38% 0 0 34%}
+.win{position:absolute;left:6%;right:10%;top:17%;background:var(--paper-raised);color:var(--ink);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-lg);transform:rotate(-2.5deg)}
+.win__bar{display:flex;gap:8px;padding:10px 12px;background:var(--mint);border-bottom:var(--border-thick) solid var(--ink)}
+.win__bar i{width:13px;height:13px;background:var(--paper-raised);border:var(--border-thin) solid var(--ink)}
+.win__body{padding:var(--space-5)}
+.win__body b{display:block;font:800 44px/1 var(--font-display);letter-spacing:-.03em;margin-bottom:var(--space-4)}
+.win__line{height:10px;background:var(--ink);margin-bottom:10px}
+.win__body .nb-btn{margin-top:var(--space-3);pointer-events:none}
+.art .nb-sticker{position:absolute;right:-6px;top:-14px;transform:rotate(8deg);z-index:2;font-size:15px}
+
+/* layanan */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);align-items:start}
+.cards .nb-card{padding:var(--space-6) var(--space-5)}
+.cards .nb-card:nth-child(2){margin-top:var(--space-6)}
+.cards .nb-btn{margin-top:var(--space-5)}
+
+/* proses */
+.proses{background:var(--cobalt);color:var(--on-cobalt)}
+.proses .nb-eyebrow{color:var(--on-cobalt)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--border-thick);background:var(--ink);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-lg)}
+.step{background:var(--paper-raised);color:var(--ink);padding:var(--space-5);min-height:220px;display:flex;flex-direction:column}
+.step .nb-tag{align-self:flex-start;margin-bottom:auto}
+.step h3{font-weight:700;font-size:30px;line-height:1.05;margin:var(--space-6) 0 var(--space-2)}
+
+/* karya */
+.work{background:var(--paper-raised);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-lg)}
+.row{display:grid;grid-template-columns:72px 1fr auto;gap:var(--space-5);align-items:center;padding:var(--space-5);color:var(--ink);text-decoration:none;border-bottom:var(--border-thick) solid var(--ink)}
+.row:last-child{border-bottom:0}
+.row__n{font:700 15px/1 var(--font-mono)}
+.row h3{font-weight:700;font-size:clamp(24px,3vw,36px);line-height:1.1;letter-spacing:-.02em}
+.row p{color:var(--ink-muted)}
+.row:hover{background:var(--yellow)}
+.row:hover .row__n,.row:hover h3,.row:hover p{color:var(--on-bright)}
+.work-note{margin-top:var(--space-5)}
+
+/* kontak */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7);align-items:start}
+.contact .nb-card--yellow{padding:var(--space-7) var(--space-6)}
+.contact h2{margin-bottom:var(--space-4)}
+.form{display:grid;gap:var(--space-5);padding:var(--space-6)}
+
+/* footer */
+footer{background:var(--ink);color:var(--paper);border-top:var(--border-thick) solid var(--ink);padding:var(--space-7) 0 var(--space-5)}
+.foot__word{font:800 clamp(64px,15vw,200px)/.85 var(--font-display);letter-spacing:-.05em;margin-bottom:var(--space-6)}
+.foot__row{display:flex;justify-content:space-between;gap:var(--space-5);flex-wrap:wrap;font:400 13px/18px var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.foot__row a{color:var(--paper);text-decoration-thickness:2px;text-underline-offset:4px}
+
+@media (max-width:860px){
+  .hero__grid,.contact{grid-template-columns:1fr}
+  .art{min-height:380px}
+  .cards{grid-template-columns:1fr}
+  .cards .nb-card:nth-child(2){margin-top:0}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .row{grid-template-columns:48px 1fr}
+  .row .nb-tag{grid-column:2;justify-self:start}
+  .nb-nav__links{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nb-nav">
+  <a class="nb-logo" href="#"><span class="nb-logo__mark"></span>Sakippp</a>
+  <ul class="nb-nav__links">
+    <li><a href="#tentang" aria-current="page">Tentang</a></li>
+    <li><a href="#perjalanan">Perjalanan</a></li>
+    <li><a href="#proyek">Proyek</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+  </ul>
+  <a class="nb-btn nb-btn--sm nb-btn--tomato" href="#kontak">Ajak kerja sama</a>
+</header>
+
+<main>
+<section class="hero nb-grid" style="border-top:0">
+  <div class="wrap hero__grid">
+    <div>
+      <span class="nb-tag nb-tag--mint">Terbuka untuk magang &amp; freelance</span>
+      <h1>Halo, saya <span class="mark">Sakippp.</span></h1>
+      <p class="lead">Muhammad Tsaqib Hidayat, fullstack developer dengan Laravel, React, dan PostgreSQL. Saya membangun sistem untuk sekolah, UMKM, dan instansi: tampilannya tegas, kodenya rapi.</p>
+      <div class="cta">
+        <a class="nb-btn nb-btn--lg" href="#proyek">Lihat proyek</a>
+        <a class="nb-btn nb-btn--lg nb-btn--plain" href="#kontak">Hubungi saya</a>
+      </div>
+      <p class="note">Mahasiswa D3 Rekayasa Perangkat Lunak Aplikasi, Telkom University.</p>
+    </div>
+    <div class="art" aria-hidden="true">
+      <div class="art__b art__b--t"></div>
+      <div class="art__b art__b--c"></div>
+      <span class="nb-tag nb-tag--yellow nb-sticker">Fullstack dev</span>
+      <div class="win">
+        <div class="win__bar"><i></i><i></i><i></i></div>
+        <div class="win__body">
+          <b>Halo, dunia.</b>
+          <div class="win__line" style="width:100%"></div>
+          <div class="win__line" style="width:82%"></div>
+          <div class="win__line" style="width:54%"></div>
+          <span class="nb-btn nb-btn--sm">git push</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="nb-marquee" aria-hidden="true">
+  <div class="nb-marquee__track">
+    <span class="nb-marquee__item">Laravel</span><span class="nb-marquee__item">React</span><span class="nb-marquee__item">PostgreSQL</span><span class="nb-marquee__item">MySQL</span><span class="nb-marquee__item">Vue</span><span class="nb-marquee__item">AI &amp; RAG</span>
+    <span class="nb-marquee__item">Laravel</span><span class="nb-marquee__item">React</span><span class="nb-marquee__item">PostgreSQL</span><span class="nb-marquee__item">MySQL</span><span class="nb-marquee__item">Vue</span><span class="nb-marquee__item">AI &amp; RAG</span>
+  </div>
+</div>
+
+<section id="tentang" class="sec" style="border-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="nb-eyebrow">01 / Tentang</p><h2>Yang saya<br>kerjakan</h2></div>
+      <p style="max-width:28em">Anggota fullstack di Stematel Dev, komunitas developer mahasiswa di bawah Telkom School Purwokerto. Selain itu saya menerima proyek klien lepas.</p>
+    </div>
+    <div class="cards">
+      <article class="nb-card nb-card--yellow">
+        <p class="nb-card__index">01</p>
+        <h3 class="nb-card__title">Antarmuka</h3>
+        <p class="nb-card__text">React dan Vue untuk tampilan yang jelas dan cepat dipakai, dari redesign platform layanan publik sampai website profil sekolah.</p>
+      </article>
+      <article class="nb-card">
+        <p class="nb-card__index">02</p>
+        <h3 class="nb-card__title">Backend &amp; data</h3>
+        <p class="nb-card__text">Laravel dengan PostgreSQL atau MySQL: autentikasi, alur data, dan panel pengelolaan yang bisa dipegang orang non-teknis.</p>
+      </article>
+      <article class="nb-card nb-card--mint">
+        <p class="nb-card__index">03</p>
+        <h3 class="nb-card__title">AI &amp; platform UMKM</h3>
+        <p class="nb-card__text">Sistem berbasis AI/RAG dan platform untuk usaha kecil, dikerjakan sebagai proyek freelance dan klien.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="perjalanan" class="sec proses">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="nb-eyebrow">02 / Perjalanan</p><h2>Dari kelas<br>ke proyek nyata</h2></div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="nb-tag nb-tag--yellow">SMK</span><h3>SMK Telkom Purwokerto</h3><p>Jurusan Pengembangan Perangkat Lunak dan Gim. Lulus uji kompetensi dengan sertifikasi BNSP Novice Programmer.</p></div>
+      <div class="step"><span class="nb-tag nb-tag--tomato">Magang</span><h3>Diginet Media</h3><p>Magang frontend dan UI/UX, lalu berlanjut sebagai freelance di proyek instansi.</p></div>
+      <div class="step"><span class="nb-tag nb-tag--mint">Komunitas</span><h3>Stematel Dev</h3><p>Fullstack developer di komunitas mahasiswa Telkom School Purwokerto.</p></div>
+      <div class="step"><span class="nb-tag">Kuliah</span><h3>Telkom University</h3><p>D3 Rekayasa Perangkat Lunak Aplikasi, mulai September 2026.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="proyek" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="nb-eyebrow">03 / Proyek</p><h2>Pilihan karya</h2></div>
+    </div>
+    <div class="work">
+      <a class="row" href="#"><span class="row__n">01</span><div><h3>Digital Library MTsN 1 Banyumas</h3><p>Platform perpustakaan digital sekolah. Laravel Blade, MySQL. Sudah live.</p></div><span class="nb-tag nb-tag--yellow">Fullstack</span></a>
+      <a class="row" href="#"><span class="row__n">02</span><div><h3>Platform Mal Pelayanan Publik</h3><p>Redesign frontend dengan React, dikerjakan lewat Diginet Media.</p></div><span class="nb-tag nb-tag--mint">Frontend</span></a>
+      <a class="row" href="#"><span class="row__n">03</span><div><h3>Platform UMKM bagi hasil</h3><p>Platform pendanaan mikro untuk usaha kecil, dari prototipe sampai sistem desain.</p></div><span class="nb-tag nb-tag--tomato">UMKM</span></a>
+      <a class="row" href="#"><span class="row__n">04</span><div><h3>Website profil sekolah Situwangi</h3><p>Digitalisasi sekolah sekaligus kanal pemasarannya. Laravel dan React.</p></div><span class="nb-tag nb-tag--cobalt">Frontend</span></a>
+      <a class="row" href="#"><span class="row__n">05</span><div><h3>Aplikasi instansi daerah</h3><p>Agenda pemerintah daerah (Yii2, lalu Laravel + React), antrean multi-instansi (Vue), dan sistem DLH (Laravel + Vue).</p></div><span class="nb-tag">Magang</span></a>
+    </div>
+    <p class="note work-note">Sebagian klien dirahasiakan. Tautan setiap proyek bisa kamu isi di atribut href.</p>
+  </div>
+</section>
+
+<section id="kontak" class="sec">
+  <div class="wrap contact">
+    <div class="nb-card nb-card--yellow">
+      <p class="nb-eyebrow">04 / Kontak</p>
+      <h2>Ada proyek?<br>Ada magang?<br>Kirim saja.</h2>
+      <p class="lead" style="margin:var(--space-4) 0 0">Saya terbuka untuk magang, freelance, dan kerja paruh waktu. Ceritakan singkat, saya balas dengan pertanyaan.</p>
+    </div>
+    <form class="nb-card form" action="mailto:emailmu@contoh.com" method="post" enctype="text/plain">
+      <div class="nb-field"><label class="nb-label" for="n">Nama</label><input class="nb-input" id="n" name="nama" placeholder="Nama kamu"></div>
+      <div class="nb-field"><label class="nb-label" for="k">WhatsApp atau email</label><input class="nb-input" id="k" name="kontak" placeholder="08xx atau nama@email.com"><p class="nb-hint">Hanya dipakai untuk membalas pesan ini.</p></div>
+      <div class="nb-field"><label class="nb-label" for="b">Pesan</label><textarea class="nb-input" id="b" name="pesan" placeholder="Ceritakan singkat"></textarea></div>
+      <button class="nb-btn nb-btn--tomato nb-btn--lg" type="submit">Kirim pesan</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot__word">Sakippp</div>
+    <div class="foot__row">
+      <span>&copy; 2026 Muhammad Tsaqib Hidayat</span>
+      <span><a href="#">GitHub</a> &nbsp; <a href="#">LinkedIn</a> &nbsp; <a href="#kontak">Email</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
