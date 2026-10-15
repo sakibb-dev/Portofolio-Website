@@ -22,6 +22,9 @@ const APPROVED_TEXT_CHANGES: [string, string][] = [
   ],
 ];
 
+// Perubahan CSS yang sudah disetujui; disuntikkan ke desain dengan alasan yang sama.
+const APPROVED_CSS = "@media (max-width:560px){.steps{grid-template-columns:1fr}}";
+
 const FREEZE = "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}";
 
 async function settle(page: Page) {
@@ -49,6 +52,7 @@ async function main() {
   mkdirSync(OUT, { recursive: true });
   let design = readFileSync(resolve("design/index.html"), "utf8");
   for (const [from, to] of APPROVED_TEXT_CHANGES) design = design.replace(from, to);
+  design = design.replace("</style>", `${APPROVED_CSS}\n</style>`);
 
   const browser = await chromium.launch();
   let failed = false;

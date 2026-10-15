@@ -209,3 +209,9 @@ div.row:hover p{color:var(--ink-muted)}
 .js-reveal .step[data-reveal] > *{opacity:0;transform:translateY(16px);transition:inherit;transition-property:opacity,transform}
 .js-reveal .step[data-reveal].is-in > *{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js-reveal [data-reveal],.js-reveal [data-reveal] > *{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* Perbaikan dari desain asli (disetujui): di layar sempit grid 2 kolom Perjalanan lebih lebar dari layar
+   karena kata panjang di judul 30px. Di ≤560px jadi 1 kolom. */
+@media (max-width:560px){
+  .steps{grid-template-columns:1fr}
+}
