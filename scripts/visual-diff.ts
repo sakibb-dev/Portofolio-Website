@@ -30,6 +30,21 @@ async function settle(page: Page) {
   await page.waitForTimeout(300);
 }
 
+/** Scroll pelan turun lalu naik agar semua animasi reveal & scrollspy selesai seperti dipakai manusia. */
+async function scrollThrough(page: Page) {
+  const h = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y <= h; y += 300) {
+    await page.evaluate((v) => window.scrollTo(0, v), y);
+    await page.waitForTimeout(60);
+  }
+  for (let y = h; y >= 0; y -= 300) {
+    await page.evaluate((v) => window.scrollTo(0, v), y);
+    await page.waitForTimeout(60);
+  }
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(1200);
+}
+
 async function main() {
   mkdirSync(OUT, { recursive: true });
   let design = readFileSync(resolve("design/index.html"), "utf8");
@@ -38,11 +53,12 @@ async function main() {
   const browser = await chromium.launch();
   let failed = false;
 
-  for (const width of WIDTHS) {
+  // Pass 1: reduced motion (tanpa animasi). Pass 2: animasi aktif, dibandingkan setelah semua item muncul.
+  for (const [width, motion] of WIDTHS.flatMap((w) => [[w, "reduce"], [w, "animasi"]] as const)) {
     const ctx = await browser.newContext({
       viewport: { width, height: 900 },
       deviceScaleFactor: 1,
-      reducedMotion: "reduce",
+      reducedMotion: motion === "reduce" ? "reduce" : "no-preference",
     });
     const page = await ctx.newPage();
 
@@ -51,6 +67,7 @@ async function main() {
     const a = PNG.sync.read(await page.screenshot({ fullPage: true }));
 
     await page.goto(BASE_URL, { waitUntil: "networkidle" });
+    if (motion === "animasi") await scrollThrough(page);
     await settle(page);
     const b = PNG.sync.read(await page.screenshot({ fullPage: true }));
 
@@ -66,15 +83,16 @@ async function main() {
     const diff = new PNG({ width: w, height: h });
     const n = pixelmatch(ca.data, cb.data, diff.data, w, h, { threshold: 0.1 });
 
-    writeFileSync(`${OUT}/${width}-design.png`, PNG.sync.write(a));
-    writeFileSync(`${OUT}/${width}-app.png`, PNG.sync.write(b));
-    writeFileSync(`${OUT}/${width}-diff.png`, PNG.sync.write(diff));
+    const tag = `${width}-${motion}`;
+    writeFileSync(`${OUT}/${tag}-design.png`, PNG.sync.write(a));
+    writeFileSync(`${OUT}/${tag}-app.png`, PNG.sync.write(b));
+    writeFileSync(`${OUT}/${tag}-diff.png`, PNG.sync.write(diff));
 
     const sizeNote =
       a.height !== b.height || a.width !== b.width
         ? ` UKURAN BEDA: desain ${a.width}x${a.height}, app ${b.width}x${b.height}`
         : "";
-    console.log(`${width}px: ${n} piksel berbeda dari ${w * h}.${sizeNote}`);
+    console.log(`${width}px (${motion}): ${n} piksel berbeda dari ${w * h}.${sizeNote}`);
     if (n > 0 || sizeNote) failed = true;
     await ctx.close();
   }

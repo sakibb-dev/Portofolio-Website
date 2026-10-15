@@ -29,6 +29,7 @@ export function Projects({ section, projects }: { section: Section; projects: Pr
               <a
                 key={p.id}
                 className="row"
+                data-reveal
                 href={p.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -36,7 +37,7 @@ export function Projects({ section, projects }: { section: Section; projects: Pr
                 {inner}
               </a>
             ) : (
-              <div key={p.id} className="row">
+              <div key={p.id} className="row" data-reveal>
                 {inner}
               </div>
             );

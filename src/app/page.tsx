@@ -7,13 +7,14 @@ import { Journey } from "@/components/site/Journey";
 import { Projects } from "@/components/site/Projects";
 import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
+import { Reveal } from "@/components/site/Reveal";
 
 export default async function Home() {
   const c = await getContent();
   return (
     <>
       <Nav settings={c.settings} sections={c.sections} />
-      <main>
+      <main id="konten">
         <Hero hero={c.hero} />
         <Marquee items={c.stack} />
         <Services section={c.sections.about} items={c.services} />
@@ -22,6 +23,7 @@ export default async function Home() {
         <Contact section={c.sections.contact} />
       </main>
       <Footer settings={c.settings} socials={c.socials} />
+      <Reveal />
     </>
   );
 }

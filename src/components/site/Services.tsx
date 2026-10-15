@@ -15,7 +15,7 @@ export function Services({ section, items }: { section: Section; items: Service[
         </div>
         <div className="cards">
           {items.map((item, i) => (
-            <article key={item.id} className={colorClass("nb-card", item.color)}>
+            <article key={item.id} className={colorClass("nb-card", item.color)} data-reveal>
               <p className="nb-card__index">{pad2(i + 1)}</p>
               <h3 className="nb-card__title">{item.title}</h3>
               <p className="nb-card__text">{item.body}</p>

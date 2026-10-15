@@ -43,8 +43,8 @@ await items.nth(0).getByRole("button", { name: "Edit" }).click();
 await items.nth(0).getByLabel(/URL GitHub/).fill("https://github.com/sakibb-dev/Portofolio-Website");
 await items.nth(0).getByRole("button", { name: "Simpan" }).click(); await page.waitForSelector("text=Tersimpan.");
 html = await pub();
-check("proyek ber-URL jadi tautan tab baru + noopener", /<a class="row" href="https:\/\/github.com\/sakibb-dev\/Portofolio-Website" target="_blank" rel="noopener noreferrer">/.test(html));
-check("proyek tanpa URL tetap div", (html.match(/<div class="row">/g) ?? []).length === 4);
+check("proyek ber-URL jadi tautan tab baru + noopener", /<a class="row" data-reveal="true" href="https:\/\/github.com\/sakibb-dev\/Portofolio-Website" target="_blank" rel="noopener noreferrer">/.test(html));
+check("proyek tanpa URL tetap div", (html.match(/<div class="row" data-reveal="true">/g) ?? []).length === 4);
 
 const before = rows(await pub());
 await items.nth(0).getByRole("button", { name: /Turunkan/ }).click(); await wait(800);

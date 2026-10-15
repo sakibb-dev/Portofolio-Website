@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { REVEAL_BOOT } from "@/components/site/Reveal";
 import { getContent } from "@/lib/content";
 import "./globals.css";
 
@@ -28,6 +29,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id">
       <head>
+        {/* Skrip statis (bukan konten): pasang mode animasi sebelum paint agar tidak berkedip. */}
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_BOOT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         {/* Sama dengan design/index.html agar render fon identik. */}
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}

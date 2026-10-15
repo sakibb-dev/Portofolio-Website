@@ -110,7 +110,8 @@ Isi seed hanya punya satu sumber: `src/content/seed.ts`. Setelah mengubahnya, ja
 
 ```bash
 npm run build && npm start      # di terminal lain
-npm run visual-diff             # bandingkan halaman dengan design/index.html di 1280 & 390 px
+npm run visual-diff             # bandingkan dengan design/index.html di 1280 & 390 px, tanpa & dengan animasi
+npm run test:reveal             # animasi muncul bertahap; mati saat reduced-motion / tanpa JS
 npm run db:reset:local
 npm run test:rls                # 21 cek RLS & storage untuk anon / non-admin / admin
 npm run db:reset:local

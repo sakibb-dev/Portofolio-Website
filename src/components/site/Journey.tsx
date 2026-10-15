@@ -15,7 +15,7 @@ export function Journey({ section, steps }: { section: Section; steps: JourneySt
         </div>
         <div className="steps">
           {steps.map((step) => (
-            <div key={step.id} className="step">
+            <div key={step.id} className="step" data-reveal>
               <span className={colorClass("nb-tag", step.tag_color)}>{step.tag_label}</span>
               <h3>{step.title}</h3>
               <p>{step.body}</p>

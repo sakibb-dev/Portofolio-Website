@@ -7,7 +7,7 @@ export function Contact({ section }: { section: Section }) {
   return (
     <section id={SECTION_ANCHORS.contact} className="sec">
       <div className="wrap contact">
-        <div className="nb-card nb-card--yellow">
+        <div className="nb-card nb-card--yellow" data-reveal>
           <p className="nb-eyebrow">{section.eyebrow}</p>
           <h2>{withBreaks(section.heading)}</h2>
           {section.intro && (

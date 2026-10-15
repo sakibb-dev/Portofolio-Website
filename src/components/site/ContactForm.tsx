@@ -10,7 +10,7 @@ export function ContactForm() {
   const fieldClass = (k: keyof typeof err) => `nb-field${err[k] ? " nb-field--error" : ""}`;
 
   return (
-    <form className="nb-card form" action={action} noValidate>
+    <form className="nb-card form" action={action} noValidate data-reveal>
       <div className={fieldClass("nama")}>
         <label className="nb-label" htmlFor="n">
           Nama
@@ -85,8 +85,12 @@ export function ContactForm() {
       <button className="nb-btn nb-btn--tomato nb-btn--lg" type="submit" disabled={pending}>
         {pending ? "Mengirim…" : "Kirim pesan"}
       </button>
+      {/* Live region selalu ada agar pembaca layar mengumumkan hasil kirim. */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {state.message}
+      </p>
       {state.message && (
-        <p role="status" aria-live="polite" className={state.ok ? "nb-hint" : "nb-error"}>
+        <p className={state.ok ? "nb-hint" : "nb-error"} aria-hidden="true">
           {state.message}
         </p>
       )}
