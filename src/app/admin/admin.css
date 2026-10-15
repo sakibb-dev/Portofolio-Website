@@ -1,0 +1,61 @@
+/* Tata letak panel admin. Hanya memakai token & komponen nb-* dari globals.css. */
+.adm{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.adm-side{display:flex;flex-direction:column;gap:var(--space-5);padding:var(--space-5);border-right:var(--border-thick) solid var(--ink);background:var(--paper)}
+.adm-side .nb-logo{font-size:24px}
+.adm-menu{display:grid;gap:var(--space-1);margin:0;padding:0;list-style:none}
+.adm-menu a{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);padding:10px 12px;font:700 16px/1.2 var(--font-display);color:var(--ink);text-decoration:none;border:var(--border-thin) solid transparent}
+.adm-menu a:hover,.adm-menu a[aria-current="page"]{background:var(--yellow);color:var(--on-bright);border-color:var(--ink)}
+.adm-side__foot{margin-top:auto;display:grid;gap:var(--space-3)}
+.adm-main{padding:var(--space-7) var(--space-6);display:grid;gap:var(--space-6);align-content:start;max-width:960px;width:100%}
+.adm-main h1{font-size:clamp(36px,5vw,56px);line-height:1;margin:0}
+.adm-main h2{font-size:28px;line-height:1.1}
+.adm-block{display:grid;gap:var(--space-4)}
+.adm-form{display:grid;gap:var(--space-5)}
+.adm-form__grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+.adm-form__grid .nb-field--wide{grid-column:1 / -1}
+.adm-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-4)}
+.adm-status{margin:0;font:700 13px/18px var(--font-mono)}
+.adm-count{justify-self:end;font:400 12px/16px var(--font-mono);color:var(--ink-muted)}
+
+/* Daftar item yang bisa diurutkan */
+.adm-list{display:grid;gap:var(--space-3);margin:0;padding:0;list-style:none}
+.adm-item{background:var(--paper-raised);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-sm)}
+.adm-item[data-dragging="true"]{opacity:.5}
+.adm-item[data-over="true"]{outline:3px dashed var(--ink);outline-offset:3px}
+.adm-item__row{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4)}
+.adm-item__grip{cursor:grab;font:700 18px/1 var(--font-mono);color:var(--ink-muted);user-select:none;padding:4px}
+.adm-item__title{flex:1;min-width:0;font:700 17px/1.3 var(--font-display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-item[data-hidden="true"] .adm-item__title{color:var(--ink-muted);text-decoration:line-through}
+.adm-item__tools{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.adm-item__edit{padding:var(--space-4);border-top:var(--border-thick) solid var(--ink)}
+.adm-icon{min-width:36px;padding-inline:10px}
+
+/* Kotak masuk */
+.adm-inbox{display:grid;gap:var(--space-3);margin:0;padding:0;list-style:none}
+.adm-msg{display:grid;grid-template-columns:auto 1fr auto;gap:var(--space-4);align-items:center;padding:var(--space-4);color:var(--ink);text-decoration:none;background:var(--paper-raised);border:var(--border-thick) solid var(--ink);box-shadow:var(--shadow-sm)}
+.adm-msg:hover{background:var(--yellow);color:var(--on-bright)}
+.adm-msg[data-unread="true"] .adm-msg__name{font-weight:800}
+.adm-msg__name{font:700 18px/1.2 var(--font-display)}
+.adm-msg__snip{margin:4px 0 0;color:var(--ink-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-msg:hover .adm-msg__snip{color:var(--on-bright)}
+.adm-msg__time{font:400 12px/16px var(--font-mono)}
+.adm-dot{width:12px;height:12px;border:var(--border-thin) solid var(--ink);background:transparent}
+.adm-dot[data-on="true"]{background:var(--tomato)}
+.adm-body{white-space:pre-wrap;overflow-wrap:anywhere}
+.adm-meta{display:grid;grid-template-columns:auto 1fr;gap:var(--space-2) var(--space-4);margin:0}
+.adm-meta dt{font:700 13px/20px var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.adm-meta dd{margin:0;overflow-wrap:anywhere}
+
+/* Login */
+.adm-login{min-height:100vh;display:grid;place-items:center;padding:var(--space-5)}
+.adm-login .nb-card{width:100%;max-width:420px;display:grid;gap:var(--space-5);padding:var(--space-6)}
+
+@media (max-width:860px){
+  .adm{grid-template-columns:1fr}
+  .adm-side{border-right:0;border-bottom:var(--border-thick) solid var(--ink)}
+  .adm-menu{grid-template-columns:repeat(2,1fr)}
+  .adm-main{padding:var(--space-6) var(--space-4)}
+  .adm-form__grid{grid-template-columns:1fr}
+  .adm-item__row{flex-wrap:wrap}
+  .adm-item__title{flex-basis:calc(100% - 40px)}
+}

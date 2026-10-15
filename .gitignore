@@ -42,3 +42,6 @@ next-env.d.ts
 
 # visual diff output
 /.visual-diff/
+!.env.example
+# skrip uji lokal (pakai kredensial lokal)
+/scripts/.*

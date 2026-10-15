@@ -189,3 +189,7 @@ div.row:hover p{color:var(--ink-muted)}
   .cards .nb-card:nth-child(even){margin-top:0}
   .steps > .step:last-child:nth-child(odd){grid-column:1 / -1}
 }
+
+/* Halaman /cv: penampil PDF memenuhi layar di bawah nav. */
+.cv-view{height:calc(100dvh - 67px);background:var(--paper)}
+.cv-view object{display:block;width:100%;height:100%;border:0}
