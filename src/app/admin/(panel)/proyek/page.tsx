@@ -9,7 +9,7 @@ export default async function ProjectsAdmin() {
   return (
     <>
       <PageHead eyebrow="Section 03" title="Proyek">
-        Baris dengan URL GitHub menjadi tautan (tab baru). Tanpa URL, baris hanya teks.
+        Open source wajib punya URL GitHub dan barisnya jadi tautan (tab baru). Private tidak boleh punya URL GitHub.
       </PageHead>
       <SectionForm sectionKey="projects" section={sections.projects} />
       <h2>Daftar proyek</h2>

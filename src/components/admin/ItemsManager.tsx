@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { ITEM_FIELDS, VISIBLE_LIMITS, type ItemTable } from "@/lib/fields";
+import { PROJECT_STATUS_LABEL, type ProjectStatus } from "@/lib/types";
 import {
   createItem,
   deleteItem,
@@ -116,6 +117,11 @@ export function ItemsManager({
                 <span className="adm-item__title">
                   {String(i + 1).padStart(2, "0")} · {title}
                 </span>
+                {typeof item.status === "string" && (
+                  <span className={item.status === "public" ? "nb-tag nb-tag--mint" : "nb-tag"}>
+                    {PROJECT_STATUS_LABEL[item.status as ProjectStatus]}
+                  </span>
+                )}
                 {!item.visible && <span className="nb-tag">Tersembunyi</span>}
                 <div className="adm-item__tools">
                   <button
@@ -172,6 +178,7 @@ export function ItemsManager({
                     fields={fields}
                     values={item as Record<string, string>}
                     action={updateItem.bind(null, table, item.id)}
+                    itemTable={table}
                   />
                 </div>
               )}
@@ -189,6 +196,7 @@ export function ItemsManager({
           action={createItem.bind(null, table)}
           submitLabel="Tambah"
           resetOnSuccess
+          itemTable={table}
         />
       </div>
     </div>

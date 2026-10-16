@@ -7,7 +7,7 @@ import { NB_COLORS } from "@/lib/types";
 /** Satu field form admin dengan komponen nb-field / nb-input dari desain. */
 export function FieldInput({ field, value, error }: { field: Field; value: string; error?: string }) {
   const id = useId();
-  const [text, setText] = useState(field.kind === "color" ? value || "netral" : value);
+  const [text, setText] = useState(value || field.default || (field.kind === "color" ? "netral" : ""));
   const hintId = `${id}-hint`;
   const errId = `${id}-err`;
   const describedBy = [field.hint && hintId, error && errId].filter(Boolean).join(" ") || undefined;
@@ -27,7 +27,15 @@ export function FieldInput({ field, value, error }: { field: Field; value: strin
         {field.label}
         {field.optional && " (opsional)"}
       </label>
-      {field.kind === "color" ? (
+      {field.kind === "select" ? (
+        <select {...common} value={text} onChange={(e) => setText(e.target.value)}>
+          {field.options?.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      ) : field.kind === "color" ? (
         <select {...common} value={text} onChange={(e) => setText(e.target.value)}>
           {NB_COLORS.map((c) => (
             <option key={c} value={c}>
@@ -55,7 +63,7 @@ export function FieldInput({ field, value, error }: { field: Field; value: strin
           required={!field.optional}
         />
       )}
-      {field.max && field.kind !== "color" && (
+      {field.max && field.kind !== "color" && field.kind !== "select" && (
         <span className="adm-count" aria-live="off">
           {text.length}/{field.max}
         </span>

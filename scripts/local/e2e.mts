@@ -39,12 +39,33 @@ await title.fill("Halo, saya *Sakippp.*"); await page.click("text=Simpan"); awai
 // --- Proyek
 await page.goto(BASE + "/admin/proyek");
 const items = page.locator(".adm-list > li");
-await items.nth(0).getByRole("button", { name: "Edit" }).click();
-await items.nth(0).getByLabel(/URL GitHub/).fill("https://github.com/sakibb-dev/Portofolio-Website");
-await items.nth(0).getByRole("button", { name: "Simpan" }).click(); await page.waitForSelector("text=Tersimpan.");
+let posts = 0;
+page.on("request", (r) => { if (r.method() === "POST") posts++; });
+const first = items.nth(0);
+await first.getByRole("button", { name: "Edit" }).click();
+check("status default proyek seed: Private", (await first.getByLabel("Status", { exact: true }).inputValue()) === "private");
+// Validasi di form: Private + URL ditolak sebelum dikirim ke server.
+await first.getByLabel(/URL GitHub/).fill("https://github.com/sakibb-dev/Portofolio-Website");
+posts = 0;
+await first.getByRole("button", { name: "Simpan" }).click(); await wait(400);
+check("form: Private + URL ditolak tanpa request ke server", posts === 0 && /tidak boleh/.test((await first.locator(".nb-error").first().textContent()) ?? ""));
+check("form: fokus pindah ke field yang salah", await first.getByLabel(/URL GitHub/).evaluate((el) => el === document.activeElement));
+await first.getByLabel("Status", { exact: true }).selectOption("public");
+await first.getByLabel(/Catatan status/).fill("Frontend saja, backend tidak dipublikasikan");
+await first.getByRole("button", { name: "Simpan" }).click(); await page.waitForSelector("text=Tersimpan.");
 html = await pub();
-check("proyek ber-URL jadi tautan tab baru + noopener", /<a class="row" data-reveal="true" href="https:\/\/github.com\/sakibb-dev\/Portofolio-Website" target="_blank" rel="noopener noreferrer">/.test(html));
-check("proyek tanpa URL tetap div", (html.match(/<div class="row" data-reveal="true">/g) ?? []).length === 4);
+check("Open source + URL jadi tautan tab baru + noopener", /<a class="row" data-reveal="true" href="https:\/\/github.com\/sakibb-dev\/Portofolio-Website" target="_blank" rel="noopener noreferrer">/.test(html));
+check("tag Open source (mint) di baris bertautan", html.includes('nb-tag nb-tag--mint">Open source<'));
+check("catatan status tampil di bawah deskripsi", html.includes('<p class="row__note">Frontend saja, backend tidak dipublikasikan</p>'));
+check("label keyboard Click me hanya di baris bertautan", (html.match(/class="nb-tag nb-tag--tomato row__focus"/g) ?? []).length === 1);
+check("baris Private tetap div + tag Private", (html.match(/<div class="row" data-reveal="true">/g) ?? []).length === 4 && (html.match(/class="nb-tag">Private</g) ?? []).length === 4);
+// Validasi server (bypass form browser) diuji di npm run test:fields; constraint DB di npm run test:rls.
+await first.getByLabel("Status", { exact: true }).selectOption("private");
+posts = 0;
+await first.getByRole("button", { name: "Simpan" }).click(); await wait(400);
+check("form: Open source → Private tanpa mengosongkan URL ditolak", posts === 0 && /tidak boleh/.test((await first.locator(".nb-error").first().textContent()) ?? ""));
+await first.getByLabel("Status", { exact: true }).selectOption("public");
+await first.getByRole("button", { name: "Tutup" }).click();
 
 const before = rows(await pub());
 await items.nth(0).getByRole("button", { name: /Turunkan/ }).click(); await wait(800);
@@ -70,6 +91,7 @@ await add.getByLabel("Tag", { exact: true }).fill("Uji"); await add.getByLabel("
 await add.getByRole("button", { name: "Tambah" }).click(); await page.waitForSelector("text=Ditambahkan.");
 html = await pub();
 check("tambah proyek muncul di akhir dengan tag kobalt", rows(html).at(-1) === "Proyek Uji" && html.includes('nb-tag nb-tag--cobalt">Uji<'));
+check("proyek baru default Private (bukan tautan)", (html.match(/class="nb-tag">Private</g) ?? []).length === 5);
 check("form tambah dikosongkan", (await add.getByLabel("Nama proyek").inputValue()) === "");
 await items.nth(5).getByRole("button", { name: "Hapus" }).click(); await wait(800);
 check("hapus proyek", rows(await pub()).length === 5);

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { NB_COLORS } from "./types";
+import { NB_COLORS, PROJECT_STATUSES, PROJECT_STATUS_LABEL } from "./types";
 
 /**
  * Satu definisi field → form admin (label, maxLength, petunjuk) dan validasi zod di server.
@@ -11,7 +11,8 @@ export type FieldKind =
   | "paragraph" // teks panjang satu paragraf (baris baru dibuang)
   | "href" // #anchor, /path, https://, mailto:
   | "https" // URL https:// opsional
-  | "color";
+  | "color"
+  | "select"; // pilihan tetap dari `options`
 
 export type Field = {
   name: string;
@@ -21,12 +22,22 @@ export type Field = {
   optional?: boolean;
   rows?: number;
   hint?: string;
+  options?: readonly { value: string; label: string }[];
+  /** Nilai awal di form tambah. */
+  default?: string;
 };
+
+/** Aturan antar-field: dikembalikan sebagai galat per field. */
+type Rule = (v: Record<string, string>) => { path: string; message: string }[];
 
 const HREF_RE = /^(#[\w-]*|\/[^\s]*|https?:\/\/[^\s]+|mailto:[^\s]+)$/i;
 
 function fieldSchema(f: Field) {
   if (f.kind === "color") return z.enum(NB_COLORS, { error: "Pilih warna dari daftar." });
+  if (f.kind === "select") {
+    const values = (f.options ?? []).map((o) => o.value);
+    return z.string().refine((v) => values.includes(v), "Pilih dari daftar.");
+  }
 
   const normalize = (v: string) => {
     const t = v.replace(/\r\n?/g, "\n").trim();
@@ -53,13 +64,23 @@ function fieldSchema(f: Field) {
   return out;
 }
 
-export function schemaFor(fields: Field[]) {
-  return z.object(Object.fromEntries(fields.map((f) => [f.name, fieldSchema(f)])));
+export function schemaFor(fields: Field[], rule?: Rule) {
+  const base = z.object(Object.fromEntries(fields.map((f) => [f.name, fieldSchema(f)])));
+  if (!rule) return base;
+  return base.superRefine((v, ctx) => {
+    for (const i of rule(v as Record<string, string>))
+      ctx.addIssue({ code: "custom", path: [i.path], message: i.message });
+  });
 }
 
-export function parseForm(fields: Field[], form: FormData) {
+export function parseForm(fields: Field[], form: FormData, rule?: Rule) {
   const raw = Object.fromEntries(fields.map((f) => [f.name, String(form.get(f.name) ?? "")]));
-  return schemaFor(fields).safeParse(raw);
+  return schemaFor(fields, rule).safeParse(raw);
+}
+
+/** Validasi item berulang: field + aturan antar-field. Dipakai di form (browser) dan server action. */
+export function parseItem(table: ItemTable, form: FormData) {
+  return parseForm(ITEM_FIELDS[table], form, ITEM_RULES[table]);
 }
 
 export type FieldErrors = Record<string, string>;
@@ -152,12 +173,28 @@ export const ITEM_FIELDS = {
     { name: "tag_label", label: "Tag", kind: "line", max: 16 },
     { name: "tag_color", label: "Warna tag", kind: "color" },
     {
+      name: "status",
+      label: "Status",
+      kind: "select",
+      options: PROJECT_STATUSES.map((v) => ({ value: v, label: PROJECT_STATUS_LABEL[v] })),
+      default: "private",
+      hint: "Open source wajib punya URL GitHub; Private tidak boleh punya.",
+    },
+    {
       name: "github_url",
       label: "URL GitHub",
       kind: "https",
       max: 300,
       optional: true,
-      hint: "Kosongkan jika tidak ada; baris tidak akan jadi tautan.",
+      hint: "Hanya untuk Open source. Baris proyek jadi tautan (tab baru).",
+    },
+    {
+      name: "catatan_status",
+      label: "Catatan status",
+      kind: "line",
+      max: 120,
+      optional: true,
+      hint: "Tampil di bawah deskripsi, misal: Kode belum dipublikasikan.",
     },
   ],
   social_links: [
@@ -167,6 +204,17 @@ export const ITEM_FIELDS = {
 } satisfies Record<string, Field[]>;
 
 export type ItemTable = keyof typeof ITEM_FIELDS;
+
+/** Aturan antar-field per tabel. Sama dengan check constraint di migrasi …_project_status.sql. */
+export const ITEM_RULES: Partial<Record<ItemTable, Rule>> = {
+  projects: (v) => {
+    if (v.status === "public" && !v.github_url)
+      return [{ path: "github_url", message: "Status Open source wajib punya URL GitHub." }];
+    if (v.status === "private" && v.github_url)
+      return [{ path: "github_url", message: "Status Private tidak boleh punya URL GitHub. Kosongkan, atau ubah status ke Open source." }];
+    return [];
+  },
+};
 export const ITEM_TABLES = Object.keys(ITEM_FIELDS) as ItemTable[];
 
 /** Batas jumlah item yang tampil agar layout tetap rapi. */

@@ -16,7 +16,7 @@ const COLS = {
   stack_items: "id, position, visible, label",
   services: "id, position, visible, title, body, color",
   journey_steps: "id, position, visible, tag_label, tag_color, title, body",
-  projects: "id, position, visible, title, description, tag_label, tag_color, github_url",
+  projects: "id, position, visible, title, description, tag_label, tag_color, github_url, status, catatan_status",
   social_links: "id, position, visible, label, url",
 } as const;
 

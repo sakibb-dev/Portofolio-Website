@@ -9,13 +9,13 @@ import { createSessionClient } from "@/lib/supabase/server";
 import {
   FOOTER_FIELDS,
   HERO_FIELDS,
-  ITEM_FIELDS,
   ITEM_TABLES,
   SECTION_FIELDS,
   SETTINGS_FIELDS,
   VISIBLE_LIMITS,
   flatErrors,
   parseForm,
+  parseItem,
   type Field,
   type FieldErrors,
   type ItemTable,
@@ -102,7 +102,7 @@ async function visibleCount(supabase: Awaited<ReturnType<typeof requireAdmin>>, 
 export async function createItem(table: string, _: FormState, form: FormData): Promise<FormState> {
   assertTable(table);
   const supabase = await requireAdmin();
-  const parsed = parseForm(ITEM_FIELDS[table], form);
+  const parsed = parseItem(table, form);
   if (!parsed.success) return { errors: flatErrors(parsed.error) };
 
   const limit = VISIBLE_LIMITS[table];
@@ -134,7 +134,7 @@ export async function updateItem(
 ): Promise<FormState> {
   assertTable(table);
   const supabase = await requireAdmin();
-  const parsed = parseForm(ITEM_FIELDS[table], form);
+  const parsed = parseItem(table, form);
   if (!parsed.success) return { errors: flatErrors(parsed.error) };
 
   const { error } = await supabase.from(table).update(parsed.data).eq("id", uuid.parse(id));

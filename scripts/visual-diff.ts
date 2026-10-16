@@ -14,17 +14,6 @@ const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT = resolve(".visual-diff");
 const WIDTHS = [1280, 390];
 
-// Perubahan isi yang sudah disetujui; diterapkan ke desain agar diff hanya menangkap selisih tak disengaja.
-const APPROVED_TEXT_CHANGES: [string, string][] = [
-  [
-    "Sebagian klien dirahasiakan. Tautan setiap proyek bisa kamu isi di atribut href.",
-    "Sebagian klien dirahasiakan.",
-  ],
-];
-
-// Perubahan CSS yang sudah disetujui; disuntikkan ke desain dengan alasan yang sama.
-const APPROVED_CSS = "@media (max-width:560px){.steps{grid-template-columns:1fr}}";
-
 const FREEZE = "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}";
 
 async function settle(page: Page) {
@@ -50,9 +39,15 @@ async function scrollThrough(page: Page) {
 
 async function main() {
   mkdirSync(OUT, { recursive: true });
-  let design = readFileSync(resolve("design/index.html"), "utf8");
-  for (const [from, to] of APPROVED_TEXT_CHANGES) design = design.replace(from, to);
-  design = design.replace("</style>", `${APPROVED_CSS}\n</style>`);
+  const design = readFileSync(resolve("design/index.html"), "utf8");
+
+  // CSS app harus salinan persis CSS desain (blok pertama globals.css).
+  const designCss = design.match(/<style>\n([\s\S]*?)<\/style>/)?.[1] ?? "";
+  if (!readFileSync(resolve("src/app/globals.css"), "utf8").includes(designCss)) {
+    console.error("CSS desain dan src/app/globals.css tidak sinkron. Salin ulang isi <style> desain.");
+    process.exitCode = 1;
+    return;
+  }
 
   const browser = await chromium.launch();
   let failed = false;

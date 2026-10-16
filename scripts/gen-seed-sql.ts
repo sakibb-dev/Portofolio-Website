@@ -21,6 +21,19 @@ const omitId = <T extends { id: string }>(row: T) => {
   return rest as Record<string, unknown>;
 };
 
+// Kolom proyek dari migrasi yang lebih baru (…_project_status.sql) tidak boleh masuk ke seed lama:
+// file seed dijalankan sebelum kolom itu ada. Nilai seed harus sama dengan default kolomnya.
+for (const p of seed.projects) {
+  if (p.status !== "private" || p.catatan_status !== "")
+    throw new Error(`Seed proyek "${p.title}": status/catatan_status non-default perlu migrasi data baru.`);
+}
+const seedProject = (p: (typeof seed.projects)[number]) => {
+  const row = omitId(p);
+  delete row.status;
+  delete row.catatan_status;
+  return row;
+};
+
 const s = seed.settings;
 const sql = [
   "-- DIBUAT OTOMATIS oleh scripts/gen-seed-sql.ts dari src/content/seed.ts. Jangan edit manual.\n",
@@ -40,7 +53,7 @@ const sql = [
   insert("stack_items", seed.stack.map(omitId)),
   insert("services", seed.services.map(omitId)),
   insert("journey_steps", seed.journey.map(omitId)),
-  insert("projects", seed.projects.map(omitId)),
+  insert("projects", seed.projects.map(seedProject)),
   insert("social_links", seed.socials.map(omitId)),
 ].join("\n");
 

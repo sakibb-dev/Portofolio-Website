@@ -1,6 +1,13 @@
 export const NB_COLORS = ["yellow", "mint", "tomato", "cobalt", "netral"] as const;
 export type NbColor = (typeof NB_COLORS)[number];
 
+export const PROJECT_STATUSES = ["private", "public"] as const;
+export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
+export const PROJECT_STATUS_LABEL: Record<ProjectStatus, string> = {
+  public: "Open source",
+  private: "Private",
+};
+
 export type SiteSettings = {
   site_title: string;
   site_description: string;
@@ -54,6 +61,8 @@ export type Project = Orderable & {
   tag_label: string;
   tag_color: NbColor;
   github_url: string;
+  status: ProjectStatus;
+  catatan_status: string;
 };
 export type SocialLink = Orderable & { label: string; url: string };
 

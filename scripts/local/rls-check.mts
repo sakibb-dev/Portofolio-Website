@@ -45,6 +45,17 @@ async function main() {
   r = await admin.from("services").update({ title: "x".repeat(41) }).neq("id", "00000000-0000-0000-0000-000000000000"); check("teks melebihi batas ditolak DB", !!r.error, r);
   r = await admin.from("projects").update({ github_url: "javascript:alert(1)" }).eq("id", firstId); check("github_url non-https ditolak DB", !!r.error, r);
 
+  // Status proyek ↔ URL GitHub (migrasi …_project_status.sql)
+  r = await anon.from("projects").select("status, catatan_status").order("position");
+  check("anon baca status & catatan proyek (seed: semua private)", r.data?.every((p: { status: string }) => p.status === "private"), r);
+  r = await admin.from("projects").update({ status: "public" }).eq("id", firstId); check("public tanpa URL GitHub ditolak DB", !!r.error, r);
+  r = await admin.from("projects").update({ github_url: "https://github.com/a/b" }).eq("id", firstId); check("private dengan URL GitHub ditolak DB", !!r.error, r);
+  r = await admin.from("projects").update({ status: "public", github_url: "https://github.com/a/b" }).eq("id", firstId).select(); check("public + URL GitHub diterima", r.data?.length === 1, r);
+  r = await admin.from("projects").update({ status: "ungu" }).eq("id", firstId); check("status di luar enum ditolak", !!r.error, r);
+  r = await admin.from("projects").update({ catatan_status: "x".repeat(121) }).eq("id", firstId); check("catatan status >120 ditolak DB", !!r.error, r);
+  r = await admin.from("projects").update({ catatan_status: "baris\nbaru" }).eq("id", firstId); check("catatan status multi-baris ditolak DB", !!r.error, r);
+  await admin.from("projects").update({ status: "private", github_url: "" }).eq("id", firstId);
+
   const pdf = new Blob(["%PDF-1.4\n%%EOF"], { type: "application/pdf" });
   r = await user.storage.from("cv").upload("cv-1.pdf", pdf, { contentType: "application/pdf" }); check("non-admin tidak bisa unggah CV", !!r.error, r);
   r = await admin.storage.from("cv").upload("cv-test.pdf", pdf, { contentType: "application/pdf" }); check("admin bisa unggah CV", !r.error, r);

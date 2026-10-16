@@ -154,6 +154,8 @@ export const seed: SiteContent = {
       tag_label: "Fullstack",
       tag_color: "yellow",
       github_url: "",
+      status: "private",
+      catatan_status: "",
     },
     {
       id: p2,
@@ -164,6 +166,8 @@ export const seed: SiteContent = {
       tag_label: "Frontend",
       tag_color: "mint",
       github_url: "",
+      status: "private",
+      catatan_status: "",
     },
     {
       id: p3,
@@ -175,6 +179,8 @@ export const seed: SiteContent = {
       tag_label: "UMKM",
       tag_color: "tomato",
       github_url: "",
+      status: "private",
+      catatan_status: "",
     },
     {
       id: p4,
@@ -185,6 +191,8 @@ export const seed: SiteContent = {
       tag_label: "Frontend",
       tag_color: "cobalt",
       github_url: "",
+      status: "private",
+      catatan_status: "",
     },
     {
       id: p5,
@@ -196,6 +204,8 @@ export const seed: SiteContent = {
       tag_label: "Magang",
       tag_color: "netral",
       github_url: "",
+      status: "private",
+      catatan_status: "",
     },
   ],
   socials: [

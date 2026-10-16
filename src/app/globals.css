@@ -1,4 +1,4 @@
-/* ==== CSS desain (disalin apa adanya dari design/index.html) ==== */
+/* ==== CSS desain: salinan verbatim isi <style> design/index.html (dicek oleh npm run visual-diff) ==== */
 /* tokens */
 :root,[data-theme=light]{--paper:#f4efe6;--paper-raised:#ffffff;--ink:#111111;--ink-muted:#4a4640;--yellow:#ffd60a;--tomato:#ff4d2e;--mint:#3ddc97;--cobalt:#2f4bff;--on-bright:#111111;--on-cobalt:#ffffff;--grid-line:#1111110f;--shadow-sm:2px 2px 0 0 #111111;--shadow-md:5px 5px 0 0 #111111;--shadow-lg:8px 8px 0 0 #111111}
 [data-theme=dark]{--paper:#141311;--paper-raised:#1e1c19;--ink:#f4efe6;--ink-muted:#b9b2a5;--grid-line:#f4efe61a;--shadow-sm:2px 2px 0 0 #f4efe6;--shadow-md:5px 5px 0 0 #f4efe6;--shadow-lg:8px 8px 0 0 #f4efe6}
@@ -137,6 +137,20 @@ h1{font-weight:800;font-size:clamp(48px,7.2vw,96px);line-height:.94;margin:var(-
 .row:hover{background:var(--yellow)}
 .row:hover .row__n,.row:hover h3,.row:hover p{color:var(--on-bright)}
 .work-note{margin-top:var(--space-5)}
+.row__tags{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--space-2)}
+.row__note{margin-top:var(--space-2);font:400 13px/18px var(--font-mono)}
+/* Baris tanpa URL GitHub bukan tautan: tanpa efek hover */
+div.row:hover{background:none}
+div.row:hover .row__n,div.row:hover h3{color:var(--ink)}
+div.row:hover p{color:var(--ink-muted)}
+/* Label "Click me": satu elemen fixed yang mengikuti kursor di atas baris bertautan (hanya hover:hover & pointer:fine) */
+a.row{position:relative}
+.cursor-label{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;box-shadow:var(--shadow-sm);transition:opacity .12s ease-out;will-change:transform}
+.cursor-label.is-on{opacity:1}
+@media (prefers-reduced-motion:reduce){.cursor-label{transition:none}}
+/* Pengguna keyboard: label tetap di dalam baris saat :focus-visible */
+.row__focus{display:none;position:absolute;right:var(--space-5);top:-14px;z-index:2;box-shadow:var(--shadow-sm)}
+a.row:focus-visible .row__focus{display:inline-flex}
 
 /* kontak */
 .contact{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7);align-items:start}
@@ -158,10 +172,14 @@ footer{background:var(--ink);color:var(--paper);border-top:var(--border-thick) s
   .steps{grid-template-columns:repeat(2,1fr)}
   .row{grid-template-columns:48px 1fr}
   .row .nb-tag{grid-column:2;justify-self:start}
+  .row__tags{grid-column:2;justify-content:flex-start}
   .nb-nav__links{display:none}
 }
+@media (max-width:560px){
+  .steps{grid-template-columns:1fr}
+}
 
-/* ==== Tambahan (bukan bagian desain asli) ==== */
+/* ==== Tambahan khusus app (tidak mengubah tampilan seed) ==== */
 
 /* Kartu "Yang saya kerjakan": zigzag berapa pun jumlahnya — item genap turun. */
 .cards .nb-card:nth-child(even){margin-top:var(--space-6)}
@@ -176,11 +194,6 @@ footer{background:var(--ink);color:var(--paper);border-top:var(--border-thick) s
   .steps:has(> .step:nth-child(5):last-child) > .step:last-child,
   .steps:has(> .step:nth-child(7):last-child) > .step:last-child{grid-column:span 2}
 }
-
-/* Baris proyek tanpa URL: bukan tautan, jadi tanpa efek hover. */
-div.row:hover{background:none}
-div.row:hover .row__n,div.row:hover h3{color:var(--ink)}
-div.row:hover p{color:var(--ink-muted)}
 
 /* Teks hanya untuk pembaca layar / honeypot. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -209,9 +222,3 @@ div.row:hover p{color:var(--ink-muted)}
 .js-reveal .step[data-reveal] > *{opacity:0;transform:translateY(16px);transition:inherit;transition-property:opacity,transform}
 .js-reveal .step[data-reveal].is-in > *{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js-reveal [data-reveal],.js-reveal [data-reveal] > *{opacity:1!important;transform:none!important;transition:none!important}}
-
-/* Perbaikan dari desain asli (disetujui): di layar sempit grid 2 kolom Perjalanan lebih lebar dari layar
-   karena kata panjang di judul 30px. Di ≤560px jadi 1 kolom. */
-@media (max-width:560px){
-  .steps{grid-template-columns:1fr}
-}

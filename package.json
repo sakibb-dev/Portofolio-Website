@@ -12,7 +12,10 @@
     "db:reset:local": "sh scripts/local/reset.sh",
     "test:rls": "tsx scripts/local/rls-check.mts",
     "test:e2e": "tsx scripts/local/e2e.mts",
-    "test:reveal": "tsx scripts/local/reveal-check.mts"
+    "test:reveal": "tsx scripts/local/reveal-check.mts",
+    "test:fields": "tsx scripts/local/fields-check.mts",
+    "test:cursor": "tsx scripts/local/cursor-check.mts",
+    "test:all": "sh scripts/local/test-all.sh"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

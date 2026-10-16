@@ -146,6 +146,20 @@ h1{font-weight:800;font-size:clamp(48px,7.2vw,96px);line-height:.94;margin:var(-
 .row:hover{background:var(--yellow)}
 .row:hover .row__n,.row:hover h3,.row:hover p{color:var(--on-bright)}
 .work-note{margin-top:var(--space-5)}
+.row__tags{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--space-2)}
+.row__note{margin-top:var(--space-2);font:400 13px/18px var(--font-mono)}
+/* Baris tanpa URL GitHub bukan tautan: tanpa efek hover */
+div.row:hover{background:none}
+div.row:hover .row__n,div.row:hover h3{color:var(--ink)}
+div.row:hover p{color:var(--ink-muted)}
+/* Label "Click me": satu elemen fixed yang mengikuti kursor di atas baris bertautan (hanya hover:hover & pointer:fine) */
+a.row{position:relative}
+.cursor-label{position:fixed;left:0;top:0;z-index:50;pointer-events:none;opacity:0;box-shadow:var(--shadow-sm);transition:opacity .12s ease-out;will-change:transform}
+.cursor-label.is-on{opacity:1}
+@media (prefers-reduced-motion:reduce){.cursor-label{transition:none}}
+/* Pengguna keyboard: label tetap di dalam baris saat :focus-visible */
+.row__focus{display:none;position:absolute;right:var(--space-5);top:-14px;z-index:2;box-shadow:var(--shadow-sm)}
+a.row:focus-visible .row__focus{display:inline-flex}
 
 /* kontak */
 .contact{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-7);align-items:start}
@@ -167,7 +181,11 @@ footer{background:var(--ink);color:var(--paper);border-top:var(--border-thick) s
   .steps{grid-template-columns:repeat(2,1fr)}
   .row{grid-template-columns:48px 1fr}
   .row .nb-tag{grid-column:2;justify-self:start}
+  .row__tags{grid-column:2;justify-content:flex-start}
   .nb-nav__links{display:none}
+}
+@media (max-width:560px){
+  .steps{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -268,13 +286,17 @@ footer{background:var(--ink);color:var(--paper);border-top:var(--border-thick) s
       <div><p class="nb-eyebrow">03 / Proyek</p><h2>Pilihan karya</h2></div>
     </div>
     <div class="work">
-      <a class="row" href="#"><span class="row__n">01</span><div><h3>Digital Library MTsN 1 Banyumas</h3><p>Platform perpustakaan digital sekolah. Laravel Blade, MySQL. Sudah live.</p></div><span class="nb-tag nb-tag--yellow">Fullstack</span></a>
-      <a class="row" href="#"><span class="row__n">02</span><div><h3>Platform Mal Pelayanan Publik</h3><p>Redesign frontend dengan React, dikerjakan lewat Diginet Media.</p></div><span class="nb-tag nb-tag--mint">Frontend</span></a>
-      <a class="row" href="#"><span class="row__n">03</span><div><h3>Platform UMKM bagi hasil</h3><p>Platform pendanaan mikro untuk usaha kecil, dari prototipe sampai sistem desain.</p></div><span class="nb-tag nb-tag--tomato">UMKM</span></a>
-      <a class="row" href="#"><span class="row__n">04</span><div><h3>Website profil sekolah Situwangi</h3><p>Digitalisasi sekolah sekaligus kanal pemasarannya. Laravel dan React.</p></div><span class="nb-tag nb-tag--cobalt">Frontend</span></a>
-      <a class="row" href="#"><span class="row__n">05</span><div><h3>Aplikasi instansi daerah</h3><p>Agenda pemerintah daerah (Yii2, lalu Laravel + React), antrean multi-instansi (Vue), dan sistem DLH (Laravel + Vue).</p></div><span class="nb-tag">Magang</span></a>
+      <div class="row"><span class="row__n">01</span><div><h3>Digital Library MTsN 1 Banyumas</h3><p>Platform perpustakaan digital sekolah. Laravel Blade, MySQL. Sudah live.</p></div><div class="row__tags"><span class="nb-tag nb-tag--yellow">Fullstack</span><span class="nb-tag">Private</span></div></div>
+      <div class="row"><span class="row__n">02</span><div><h3>Platform Mal Pelayanan Publik</h3><p>Redesign frontend dengan React, dikerjakan lewat Diginet Media.</p></div><div class="row__tags"><span class="nb-tag nb-tag--mint">Frontend</span><span class="nb-tag">Private</span></div></div>
+      <div class="row"><span class="row__n">03</span><div><h3>Platform UMKM bagi hasil</h3><p>Platform pendanaan mikro untuk usaha kecil, dari prototipe sampai sistem desain.</p></div><div class="row__tags"><span class="nb-tag nb-tag--tomato">UMKM</span><span class="nb-tag">Private</span></div></div>
+      <div class="row"><span class="row__n">04</span><div><h3>Website profil sekolah Situwangi</h3><p>Digitalisasi sekolah sekaligus kanal pemasarannya. Laravel dan React.</p></div><div class="row__tags"><span class="nb-tag nb-tag--cobalt">Frontend</span><span class="nb-tag">Private</span></div></div>
+      <div class="row"><span class="row__n">05</span><div><h3>Aplikasi instansi daerah</h3><p>Agenda pemerintah daerah (Yii2, lalu Laravel + React), antrean multi-instansi (Vue), dan sistem DLH (Laravel + Vue).</p></div><div class="row__tags"><span class="nb-tag">Magang</span><span class="nb-tag">Private</span></div></div>
+      <!-- Varian proyek Open source (status "public", wajib URL GitHub) dengan catatan status:
+      <a class="row" href="https://github.com/…" target="_blank" rel="noopener noreferrer"><span class="row__n">06</span><div><h3>Nama proyek</h3><p>Deskripsi.</p><p class="row__note">Catatan status, maks 120 karakter.</p></div><div class="row__tags"><span class="nb-tag">Kategori</span><span class="nb-tag nb-tag--mint">Open source</span></div><span class="nb-tag nb-tag--tomato row__focus" aria-hidden="true">Click me</span></a>
+      Catatan status juga boleh ada di baris Private. -->
     </div>
-    <p class="note work-note">Sebagian klien dirahasiakan. Tautan setiap proyek bisa kamu isi di atribut href.</p>
+    <span class="nb-tag nb-tag--tomato cursor-label" aria-hidden="true">Click me</span>
+    <p class="note work-note">Sebagian klien dirahasiakan.</p>
   </div>
 </section>
 
